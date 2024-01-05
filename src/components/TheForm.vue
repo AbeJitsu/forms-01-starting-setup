@@ -1,8 +1,15 @@
 <template>
   <form @submit.prevent="submitForm">
-    <div class="form-control">
+    <div class="form-control" :class="{invalid: userNameValidity === 'invalid'}">
       <label for="user-name">Your Name</label>
-      <input id="user-name" name="user-name" type="text" v-model="userName" />
+      <input
+        id="user-name"
+        name="user-name"
+        type="text"
+        v-model.trim="userName"
+        @blur="validateInput"
+      />
+      <p v-if="userNameValidity === 'invalid'">Please enter a valid name!</p>
     </div>
     <div class="form-control">
       <label for="age">Your Age (Years)</label>
@@ -58,20 +65,43 @@
     <div class="form-control">
       <h2>How do you learn?</h2>
       <div>
-        <input id="how-video" name="how" type="radio" v-model="how" value="video" />
+        <input
+          id="how-video"
+          name="how"
+          type="radio"
+          v-model="how"
+          value="video"
+        />
         <label for="how-video">Video Courses</label>
       </div>
       <div>
-        <input id="how-blogs" name="how" type="radio" v-model="how" value="blogs" />
+        <input
+          id="how-blogs"
+          name="how"
+          type="radio"
+          v-model="how"
+          value="blogs"
+        />
         <label for="how-blogs">Blogs</label>
       </div>
       <div>
-        <input id="how-other" name="how" type="radio" v-model="how" value="other" />
+        <input
+          id="how-other"
+          name="how"
+          type="radio"
+          v-model="how"
+          value="other"
+        />
         <label for="how-other">Other</label>
       </div>
     </div>
     <div class="form-control">
-      <input type="checkbox" id="confirm-terms" name="confirm-terms" v-model="confirm" /> 
+      <input
+        type="checkbox"
+        id="confirm-terms"
+        name="confirm-terms"
+        v-model="confirm"
+      />
       <label for="confirm-terms">Agree to terms of use?</label>
     </div>
     <div>
@@ -90,6 +120,7 @@ export default {
       interest: [],
       how: null,
       confirm: false,
+      userNameValidity: 'pending',
     };
   },
   methods: {
@@ -113,6 +144,13 @@ export default {
       console.log(this.confirm);
       this.confirm = false;
     },
+    validateInput(){
+      if(this.userName === ''){
+        this.userNameValidity = 'invalid';
+      } else {
+        this.userNameValidity = 'valid';
+      }
+    }
   },
 };
 </script>
@@ -129,6 +167,14 @@ form {
 
 .form-control {
   margin: 0.5rem 0;
+}
+
+.form-control.invalid input {
+  border-color: red;
+}
+
+.form-control.invalid label {
+  color: red;
 }
 
 label {
